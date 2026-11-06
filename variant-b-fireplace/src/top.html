@@ -38,12 +38,11 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
-      const tl = gsap.timeline();
-      tl.from("#bg", { scale: 1.15, duration: 5, ease: "power2.out" }, 0).from(
-        "#hl",
-        { opacity: 0, y: 20, duration: 1, ease: "power2.out" },
-        1,
-      );
+      const clickTag = window.clickTag || "https://example.com/landing";
+      document.getElementById("ad").onclick = () => window.open(clickTag, "_blank");
+      gsap.from("#bg", { scale: 1.1, duration: 4, ease: "slow.out" });
+
+      gsap.from("#hl", { opacity: 0, y: 20, duration: 1, ease: "power2.out", delay: 1 });
     </script>
   </body>
 </html>
