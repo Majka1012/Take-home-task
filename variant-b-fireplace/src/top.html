@@ -25,7 +25,9 @@
         width: 1672px;
       }
       #hl {
-        width: 50%;
+        left: 0;
+        top: 0;
+        width: 1032px;
       }
     </style>
   </head>
@@ -34,5 +36,14 @@
       <img id="bg" src="../assets/bg-big.jpg" />
       <img id="hl" src="../assets/top/hl.png" />
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script>
+      const tl = gsap.timeline();
+      tl.from("#bg", { scale: 1.15, duration: 5, ease: "power2.out" }, 0).from(
+        "#hl",
+        { opacity: 0, y: 20, duration: 1, ease: "power2.out" },
+        1,
+      );
+    </script>
   </body>
 </html>

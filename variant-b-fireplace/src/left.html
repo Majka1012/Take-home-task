@@ -51,5 +51,14 @@
       <img id="box" src="../assets/box.png" />
       <img id="cta" src="../assets/cta.png" />
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script>
+      const tl = gsap.timeline();
+      tl.from("#bg", { scale: 1.15, duration: 5, ease: "slow.out" }, 0).from(
+        "#hl",
+        { opacity: 0, y: 20, duration: 1, ease: "power2.out" },
+        1,
+      );
+    </script>
   </body>
 </html>
