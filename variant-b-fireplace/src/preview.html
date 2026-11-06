@@ -38,30 +38,11 @@
     </style>
   </head>
   <body>
-    <!-- <img
-      id="overlay"
-      src="../design/layout.png"
-      alt=""
-      style="
-        position: absolute;
-        left: -23px;
-        top: -45px;
-        z-index: 10;
-        opacity: 50%;
-        pointer-events: none;
-        width: 1684;
-      " /> -->
     <div id="wrap">
-      <iframe src="left.html" style="left: 0; top: 0" width="320" height="975"></iframe>
-      <iframe src="top.html" style="left: 320px; top: 0" width="1032" height="250"></iframe>
-      <iframe src="right.html" style="left: 1352px; top: 0" width="320" height="975"></iframe>
+      <iframe id="left" src="left.html" width="320" height="975"></iframe>
+      <iframe id="top" src="top.html" width="1032" height="250"></iframe>
+      <div id="site"></div>
+      <iframe id="right" src="right.html" width="320" height="975"></iframe>
     </div>
-    <!-- <button
-      onclick="
-        const o = document.getElementById('overlay');
-        o.style.opacity = o.style.opacity === '0' ? '0.5' : '0';
-      ">
-      Change opacity
-    </button> -->
   </body>
 </html>
