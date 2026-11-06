@@ -56,15 +56,15 @@
       const clickTag = window.clickTag || "https://example.com/landing";
       document.getElementById("ad").onclick = () => window.open(clickTag, "_blank");
 
-      gsap.from("#bg", { scale: 1.1, duration: 4, ease: "slow.out" });
+      gsap.from("#bg", { scale: 1.1, duration: 4, ease: "power1.out" });
 
       const tl = gsap.timeline();
-      tl.from("#logo", { opacity: 0, scale: 0.8, duration: 0.8, ease: "back.out(1.7)" }, 0.3)
+      tl.from("#logo", { opacity: 0, scale: 0.8, duration: 3, ease: "back.out(1.7)" }, 0.3)
         .from("#hl", { opacity: 0, x: -150, duration: 1.2, ease: "power3.out" }, 0.8)
         .from("#box", { opacity: 0, y: 30, duration: 0.8, ease: "power2.out" }, 2)
         .from("#cta", { opacity: 0, scale: 0.7, duration: 0.8, ease: "back.out(1.7)" }, 3.5);
 
-      gsap.to("#cta", { scale: 1.05, duration: 0.9, yoyo: true, repeat: 27, ease: "sine.inOut", delay: 5.7 }); //0.9*27+5.7=30sek
+      gsap.to("#cta", { scale: 1.05, duration: 0.9, yoyo: true, repeat: 27, ease: "sine.inOut", delay: 5 }); //0.9*(1+27)+5=30.2sek
     </script>
   </body>
 </html>
