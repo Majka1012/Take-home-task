@@ -130,7 +130,7 @@
       const bottomLine = 600;
       const topLine = 200;
 
-      const gravity = 0.1;
+      const gravity = 0.07;
       function loop() {
         speed = speed + gravity;
         y = y + speed;
@@ -138,7 +138,8 @@
           return;
         }
 
-        player.style.transform = `translateY(${y}px)`;
+        const angle = Math.max(-15, Math.min(15, speed * 5));
+        gsap.set(player, { y: y, rotation: angle });
         requestAnimationFrame(loop);
       }
 
