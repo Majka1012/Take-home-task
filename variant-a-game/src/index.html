@@ -97,5 +97,19 @@
       <img id="txt1" class="intro" src="../assets/01_game/txt1.png" srcset="../assets/01_game/txt1.png 2x" />
       <img id="txt2" class="intro" src="../assets/01_game/txt2.png" srcset="../assets/01_game/txt2.png 2x" />
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script>
+      let started = false;
+      document.getElementById("ad").addEventListener("click", game);
+      let player = document.getElementById("player");
+
+      function game() {
+        if (!started) {
+          started = true;
+          gsap.to(".intro", { autoAlpha: 0, duration: 0.4, ease: "power1.out" });
+          gsap.to("#game", { x: -2168, duration: 50, ease: "none" });
+        }
+      }
+    </script>
   </body>
 </html>
