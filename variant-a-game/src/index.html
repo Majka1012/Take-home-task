@@ -82,7 +82,7 @@
         top: 200px;
       }
       #bottomLine {
-        top: 590px;
+        top: 600px;
       }
     </style>
   </head>
@@ -123,13 +123,20 @@
       let y = 0; // distance from the start position (positive = down)
       let speed = 0; // current vertical speed (positive = down, negative = up)
 
-      const bottomLine = 590;
-      const topLine = 210;
+      //Player is 42x41 so bottom of the bottom hitbox is 258+41
+      const startTopY = 258;
+      const startBottomY = 299;
+
+      const bottomLine = 600;
+      const topLine = 200;
 
       const gravity = 0.1;
       function loop() {
         speed = speed + gravity;
         y = y + speed;
+        if (startBottomY + y > bottomLine || startTopY + y < topLine) {
+          return;
+        }
 
         player.style.transform = `translateY(${y}px)`;
         requestAnimationFrame(loop);
@@ -141,8 +148,9 @@
           gsap.to(".intro", { autoAlpha: 0, duration: 0.4, ease: "power1.out" });
           gsap.to("#game", { x: -2168, duration: 50, ease: "none" });
           loop();
+        } else {
+          speed = -4;
         }
-        speed = -4;
       });
     </script>
   </body>
