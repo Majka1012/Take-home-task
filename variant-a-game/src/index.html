@@ -69,6 +69,21 @@
       #gesture:hover {
         transform: scale(110%);
       }
+
+      .wall-line {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: red;
+        z-index: 50;
+      }
+      #topLine {
+        top: 200px;
+      }
+      #bottomLine {
+        top: 590px;
+      }
     </style>
   </head>
   <body>
@@ -96,20 +111,39 @@
       <img id="bac6" class="intro" src="../assets/01_game/bac6.png" srcset="../assets/01_game/bac6.png 2x" />
       <img id="txt1" class="intro" src="../assets/01_game/txt1.png" srcset="../assets/01_game/txt1.png 2x" />
       <img id="txt2" class="intro" src="../assets/01_game/txt2.png" srcset="../assets/01_game/txt2.png 2x" />
+
+      <div id="bottomLine" class="wall-line"></div>
+      <div id="topLine" class="wall-line"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
-      let started = false;
-      document.getElementById("ad").addEventListener("click", game);
-      let player = document.getElementById("player");
+      const player = document.getElementById("player");
 
-      function game() {
+      let started = false;
+      let y = 0; // distance from the start position (positive = down)
+      let speed = 0; // current vertical speed (positive = down, negative = up)
+
+      const bottomLine = 590;
+      const topLine = 210;
+
+      const gravity = 0.1;
+      function loop() {
+        speed = speed + gravity;
+        y = y + speed;
+
+        player.style.transform = `translateY(${y}px)`;
+        requestAnimationFrame(loop);
+      }
+
+      document.addEventListener("pointerdown", function () {
         if (!started) {
           started = true;
           gsap.to(".intro", { autoAlpha: 0, duration: 0.4, ease: "power1.out" });
           gsap.to("#game", { x: -2168, duration: 50, ease: "none" });
+          loop();
         }
-      }
+        speed = -4;
+      });
     </script>
   </body>
 </html>
