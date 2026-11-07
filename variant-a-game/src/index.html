@@ -8,15 +8,11 @@
       html,
       body {
         margin: 0;
-        height: 100%;
         overflow: hidden;
-        background: #000;
       }
 
       #ad {
         position: absolute;
-        left: 50%;
-        top: 50%;
         width: 360px;
         height: 640px;
         overflow: hidden;
@@ -29,7 +25,8 @@
       }
       #bg,
       #logo,
-      #border {
+      #border,
+      #tut {
         width: 360px;
         height: 640px;
       }
@@ -40,24 +37,30 @@
         margin: auto;
         margin-top: 125%;
       }
+      #game {
+        height: 640px;
+        top: auto;
+        bottom: 0;
+        clip-path: inset(175px 0 0 0);
+      }
+      #bg_texture {
+        top: auto;
+
+        bottom: 0px;
+      }
     </style>
   </head>
   <body>
     <div id="ad">
-      <img id="bg" src="../assets/bg.jpg" />
+      <img id="bg_texture" src="../assets/bg.jpg" />
+      <img id="bg" src="../assets/01_game/bg_texture.png" />
+      <img id="tut" src="../assets/01_game/tut.png" />
+      <img id="game" src="../assets/01_game/gameplay.png" />
       <img id="logo" src="../assets/logo.png" />
       <img id="border" src="../assets/border.png" />
       <img id="gesture" src="../assets/gesture.png" />
     </div>
 
-    <script>
-      //AI function, I will later look into why without it the view is wrong.
-      function fit() {
-        const s = Math.min(window.innerWidth / 360, window.innerHeight / 640);
-        document.getElementById("ad").style.transform = `translate(-50%, -50%) scale(${s})`;
-      }
-      window.addEventListener("resize", fit);
-      fit();
-    </script>
+    <script></script>
   </body>
 </html>
