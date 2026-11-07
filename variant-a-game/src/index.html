@@ -20,47 +20,82 @@
       }
       #ad img {
         position: absolute;
+      }
+      :where(#ad img) {
         left: 0;
         top: 0;
       }
-      #bg,
-      #logo,
-      #border,
-      #tut {
-        width: 360px;
-        height: 640px;
-      }
+
       #gesture {
-        width: 86.5px;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-        margin-top: 125%;
+        /* width: 86.5px; */
+        left: 146px;
+        top: 452px;
       }
       #game {
-        height: 640px;
-        top: auto;
-        bottom: 0;
+        /* After adding design on top it didn't align to layout thats why I left: -2px */
+        left: -2px;
         clip-path: inset(175px 0 0 0);
       }
       #bg_texture {
-        top: auto;
-
-        bottom: 0px;
+        /* height: 640px; */
+        left: 10.5px;
+        top: 78.5px;
+      }
+      #player {
+        left: 55px;
+        top: 258px;
+      }
+      #bac2 {
+        left: 275px;
+        top: 328px;
+        rotate: 6deg;
+        scale: 95%;
+      }
+      #bac6 {
+        left: 85px;
+        top: 322px;
+        scale: 70%;
+      }
+      #txt1 {
+        left: 100px;
+        top: 370px;
+        scale: 95%;
+      }
+      #txt2 {
+        left: 301px;
+        top: 388px;
+        scale: 95%;
+      }
+      #gesture:hover {
+        transform: scale(110%);
       }
     </style>
   </head>
   <body>
+    <!-- <img src="../design/01-start.png" style="position: absolute; width: 360px; top: 0; z-index: 10; opacity: 0.5" /> -->
     <div id="ad">
-      <img id="bg_texture" src="../assets/bg.jpg" />
-      <img id="bg" src="../assets/01_game/bg_texture.png" />
-      <img id="tut" src="../assets/01_game/tut.png" />
-      <img id="game" src="../assets/01_game/gameplay.png" />
-      <img id="logo" src="../assets/logo.png" />
-      <img id="border" src="../assets/border.png" />
-      <img id="gesture" src="../assets/gesture.png" />
-    </div>
+      <!-- I started with src and manually added width or height but then I found out about srcset.
+       It's eassier and more practical. -->
 
-    <script></script>
+      <!-- Background -->
+      <img id="bg" src="../assets/bg.jpg" srcset="../assets/bg.jpg 2x" />
+      <img id="bg_texture" src="../assets/01_game/bg_texture.png" srcset="../assets/01_game/bg_texture.png 2x" />
+
+      <!-- Top -->
+      <img id="tut" src="../assets/01_game/tut.png" srcset="../assets/01_game/tut.png 2x" />
+      <img id="logo" src="../assets/logo.png" srcset="../assets/logo.png 2x" />
+
+      <!-- Game -->
+      <img id="game" src="../assets/01_game/gameplay.png" srcset="../assets/01_game/gameplay.png 2x" />
+      <img id="border" src="../assets/border.png" srcset="../assets/border.png 2x" />
+      <img id="gesture" class="intro" src="../assets/gesture.png" srcset="../assets/gesture.png 2x" />
+
+      <!-- Player and obstacles -->
+      <img id="player" src="../assets/01_game/player.png" srcset="../assets/01_game/player.png 2x" />
+      <img id="bac2" class="intro" src="../assets/01_game/bac2.png" srcset="../assets/01_game/bac2.png 2x" />
+      <img id="bac6" class="intro" src="../assets/01_game/bac6.png" srcset="../assets/01_game/bac6.png 2x" />
+      <img id="txt1" class="intro" src="../assets/01_game/txt1.png" srcset="../assets/01_game/txt1.png 2x" />
+      <img id="txt2" class="intro" src="../assets/01_game/txt2.png" srcset="../assets/01_game/txt2.png 2x" />
+    </div>
   </body>
 </html>
