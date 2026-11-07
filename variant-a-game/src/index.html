@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Main view</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+
+      #ad {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 360px;
+        height: 640px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      #ad img {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      #bg,
+      #logo,
+      #border {
+        width: 360px;
+        height: 640px;
+      }
+      #gesture {
+        width: 86.5px;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        margin-top: 125%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ad">
+      <img id="bg" src="../assets/bg.jpg" />
+      <img id="logo" src="../assets/logo.png" />
+      <img id="border" src="../assets/border.png" />
+      <img id="gesture" src="../assets/gesture.png" />
+    </div>
+
+    <script>
+      //AI function, I will later look into why without it the view is wrong.
+      function fit() {
+        const s = Math.min(window.innerWidth / 360, window.innerHeight / 640);
+        document.getElementById("ad").style.transform = `translate(-50%, -50%) scale(${s})`;
+      }
+      window.addEventListener("resize", fit);
+      fit();
+    </script>
+  </body>
+</html>
