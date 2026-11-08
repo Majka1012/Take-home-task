@@ -13,10 +13,12 @@
 
       #ad {
         position: absolute;
+
         width: 360px;
         height: 640px;
         overflow: hidden;
         cursor: pointer;
+        visibility: hidden;
       }
       #ad img {
         position: absolute;
@@ -93,30 +95,41 @@
        It's eassier and more practical. -->
 
       <!-- Background -->
-      <img id="bg" src="../assets/bg.jpg" srcset="../assets/bg.jpg 2x" />
-      <img id="bg_texture" src="../assets/01_game/bg_texture.png" srcset="../assets/01_game/bg_texture.png 2x" />
+      <img id="bg" src="../assets/bg.jpg" />
+      <img id="bg_texture" src="../assets/01_game/bg_texture.png" />
 
       <!-- Top -->
-      <img id="tut" src="../assets/01_game/tut.png" srcset="../assets/01_game/tut.png 2x" />
-      <img id="logo" src="../assets/logo.png" srcset="../assets/logo.png 2x" />
+      <img id="tut" src="../assets/01_game/tut.png" />
+      <img id="logo" src="../assets/logo.png" />
 
       <!-- Game -->
-      <img id="game" src="../assets/01_game/gameplay.png" srcset="../assets/01_game/gameplay.png 2x" />
-      <img id="border" src="../assets/border.png" srcset="../assets/border.png 2x" />
-      <img id="gesture" class="intro" src="../assets/gesture.png" srcset="../assets/gesture.png 2x" />
+      <img id="game" src="../assets/01_game/gameplay.png" />
+      <img id="border" src="../assets/border.png" />
+      <img id="gesture" class="intro" src="../assets/gesture.png" />
 
       <!-- Player and obstacles -->
-      <img id="player" src="../assets/01_game/player.png" srcset="../assets/01_game/player.png 2x" />
-      <img id="bac2" class="intro" src="../assets/01_game/bac2.png" srcset="../assets/01_game/bac2.png 2x" />
-      <img id="bac6" class="intro" src="../assets/01_game/bac6.png" srcset="../assets/01_game/bac6.png 2x" />
-      <img id="txt1" class="intro" src="../assets/01_game/txt1.png" srcset="../assets/01_game/txt1.png 2x" />
-      <img id="txt2" class="intro" src="../assets/01_game/txt2.png" srcset="../assets/01_game/txt2.png 2x" />
+      <img id="player" src="../assets/01_game/player.png" />
+      <img id="bac1" class="obstacle" src="../assets/01_game/bac1.png" />
+      <img id="bac2" class="intro obstacle" src="../assets/01_game/bac2.png" />
+      <img id="bac3" class="obstacle" src="../assets/01_game/bac3.png" />
+      <img id="bac4" class="obstacle" src="../assets/01_game/bac4.png" />
+      <img id="bac5" class="obstacle" src="../assets/01_game/bac5.png" />
+      <img id="bac6" class="intro obstacle" src="../assets/01_game/bac6.png" />
+      <img id="bac6" class="intro obstacle" src="../assets/01_game/bac6.png" />
+      <img id="txt1" class="intro obstacle" src="../assets/01_game/txt1.png" />
+      <img id="txt2" class="intro obstacle" src="../assets/01_game/txt2.png" />
 
       <div id="bottomLine" class="wall-line"></div>
       <div id="topLine" class="wall-line"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
+      window.addEventListener("load", function () {
+        document.querySelectorAll("#ad img").forEach(function (img) {
+          img.style.width = img.naturalWidth / 2 + "px";
+        });
+        ad.style.visibility = "visible";
+      });
       const player = document.getElementById("player");
 
       let started = false;
@@ -124,22 +137,69 @@
       let speed = 0; // current vertical speed (positive = down, negative = up)
 
       //Player is 42x41 so bottom of the bottom hitbox is 258+41
-      const startTopY = 258;
-      const startBottomY = 299;
+      //Also I added 10 to seam "more fair" to the player
+      const hitboxTop = 258 + 10;
+      const hitboxBottom = 299;
 
       const bottomLine = 600;
       const topLine = 200;
 
       const gravity = 0.07;
+
+      const names = [
+        "bac1",
+        "bac2",
+        "bac3",
+        "bac4",
+        "bac5",
+        "bac6",
+        "txt1",
+        "txt2",
+        "txt3",
+        "txt4",
+        "txt5",
+        "txt6",
+        "txt7",
+        "txt8",
+        "txt9",
+      ];
+      names.sort(() => Math.random() - 0.5);
+      const obstacles = [];
+      let scroll = 0;
+
+      names.forEach(function (name, i) {
+        const img = document.createElement("img");
+        img.src = `../assets/01_game/${name}.png`;
+        ad.insertBefore(img, document.getElementById("border"));
+
+        const o = { img: img, x: 400 + i * 160, y: 300, w: 0, h: 0 };
+        img.onload = function () {
+          o.w = img.naturalWidth / 2;
+          o.h = img.naturalHeight / 2;
+          img.style.width = o.w + "px";
+
+          const middle = (topLine + bottomLine) / 2;
+          const centre = middle + (Math.random() * 2 - 1) * 130;
+          o.y = centre - o.h / 2;
+        };
+        obstacles.push(o);
+      });
+
       function loop() {
         speed = speed + gravity;
         y = y + speed;
-        if (startBottomY + y > bottomLine || startTopY + y < topLine) {
+        if (hitboxBottom + y > bottomLine || hitboxTop + y < topLine) {
           return;
         }
 
         const angle = Math.max(-15, Math.min(15, speed * 5));
         gsap.set(player, { y: y, rotation: angle });
+
+        scroll = scroll + 1;
+        obstacles.forEach(function (o) {
+          o.img.style.transform = `translate(${o.x - scroll}px, ${o.y}px)`;
+        });
+
         requestAnimationFrame(loop);
       }
 
