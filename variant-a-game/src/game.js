@@ -8,8 +8,6 @@ window.addEventListener("load", function () {
 const player = document.getElementById("player");
 const ad = document.getElementById("ad");
 
-const bg = document.getElementById("bg");
-
 const replay = document.getElementById("replay");
 const winInfo = document.getElementById("winCta");
 const failInfo = document.getElementById("failCta");
@@ -17,10 +15,17 @@ const failInfo = document.getElementById("failCta");
 const failEndcard = document.getElementById("fail");
 const winEndcard = document.getElementById("win");
 
+const debug = new URLSearchParams(location.search).get("debug") === "1"; // ?debug=1 shows hitboxes
+
 const clickTag = window.clickTag || "https://example.com/landing";
 function openLanding() {
   window.open(clickTag, "_blank");
 }
+
+// listeners are added ONCE, here, not inside endGame
+replay.addEventListener("click", restartGame);
+failInfo.addEventListener("click", openLanding);
+winInfo.addEventListener("click", openLanding);
 
 const gameTween = gsap.to("#game", { x: -2168, duration: 50, ease: "none", paused: true });
 
@@ -30,8 +35,7 @@ let over = false;
 let y = 0; // distance from the start position (positive = down)
 let speed = 0; // current vertical speed (positive = down, negative = up)
 
-//Player is 42x41 so bottom of the bottom hitbox is 258+41
-//Also I added 10 to seam "more fair" to the player
+// Player is 42x41. These two are used only for the top and bottom wall check.
 const hitboxTop = 258 + 10;
 const hitboxBottom = 299;
 
@@ -40,8 +44,11 @@ const topLine = 200;
 
 const gravity = 0.07;
 
-const startObstacles = 70;
-const distanceBetween = 30;
+// TEST VALUES: use 700 and 300 for the real game
+const startObstacles = 700;
+const distanceBetween = 300;
+
+const cut = { bac: 0.25, txt: 0.08 }; // fraction removed from each side of the obstacle hitbox
 
 const names = [
   "bac1",
@@ -67,10 +74,23 @@ let scroll = 0;
 
 names.forEach(function (name, i) {
   const img = document.createElement("img");
-
   ad.insertBefore(img, document.getElementById("border"));
 
-  const o = { img: img, x: startObstacles + i * distanceBetween, y: 300, w: 0, h: 0 };
+  const o = {
+    img: img,
+    x: startObstacles + i * distanceBetween,
+    y: 300,
+    w: 0,
+    h: 0,
+    cut: name.startsWith("bac") ? cut.bac : cut.txt, // <-- saved on the obstacle, touches() uses it
+  };
+
+  if (debug) {
+    o.box = document.createElement("div");
+    o.box.style.cssText = "position:absolute;left:0;top:0;outline:1px solid red;z-index:30;pointer-events:none";
+    ad.appendChild(o.box);
+  }
+
   img.onload = function () {
     o.w = img.naturalWidth / 2;
     o.h = img.naturalHeight / 2;
@@ -99,13 +119,28 @@ function loop() {
   scroll = scroll + 1;
   obstacles.forEach(function (o) {
     o.img.style.transform = `translate(${o.x - scroll}px, ${o.y}px)`;
+    if (debug) {
+      o.box.style.width = o.w * (1 - 2 * o.cut) + "px";
+      o.box.style.height = o.h * (1 - 2 * o.cut) + "px";
+      o.box.style.transform = `translate(${o.x - scroll + o.w * o.cut}px, ${o.y + o.h * o.cut}px)`;
+    }
   });
-  //   console.log(obstacles[-1]);
+
+  // collision with any obstacle
+  for (const o of obstacles) {
+    if (touches(o)) {
+      endGame(false);
+      return;
+    }
+  }
+
+  // win: the last obstacle has left the screen
   const lastO = obstacles[obstacles.length - 1];
   if (lastO.x - scroll + lastO.w < 0) {
     endGame(true);
     return;
   }
+
   requestAnimationFrame(loop);
 }
 
@@ -127,11 +162,8 @@ function endGame(win) {
   showGame(false);
   if (win) {
     winEndcard.style.visibility = "visible";
-    winInfo.addEventListener("click", openLanding);
   } else {
     failEndcard.style.visibility = "visible";
-    replay.addEventListener("click", restartGame);
-    failInfo.addEventListener("click", openLanding);
   }
 }
 
@@ -142,7 +174,7 @@ function restartGame() {
   scroll = 0;
   started = false;
   over = false;
-  gsap.set(player, { y: 0, rotation: 0 }); //reset player
+  gsap.set(player, { y: 0, rotation: 0 }); // reset player
   gsap.set(".intro", { autoAlpha: 1 });
 
   obstacles.sort(() => Math.random() - 0.5);
@@ -154,7 +186,6 @@ function restartGame() {
 
   showGame(true);
   winEndcard.style.visibility = "hidden";
-
   failEndcard.style.visibility = "hidden";
 }
 
@@ -165,5 +196,21 @@ function showGame(show) {
   });
   obstacles.forEach(function (o) {
     o.img.style.visibility = v;
+    if (o.box) o.box.style.visibility = v;
   });
+}
+
+// Rectangle overlap test: poo (a bit smaller than its image) against the obstacle (shrunk by o.cut on each side)
+function touches(o) {
+  const ox = o.x - scroll + o.w * o.cut;
+  const oy = o.y + o.h * o.cut;
+  const ow = o.w * (1 - 2 * o.cut);
+  const oh = o.h * (1 - 2 * o.cut);
+
+  const px = 55 + 6;
+  const py = 258 + y + 6;
+  const pw = 42 - 12;
+  const ph = 41 - 12;
+
+  return px < ox + ow && px + pw > ox && py < oy + oh && py + ph > oy;
 }
