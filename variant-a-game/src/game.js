@@ -12,6 +12,7 @@ const bg = document.getElementById("bg");
 const replay = document.getElementById("replay");
 
 const failEndcard = document.getElementById("fail");
+const winEndcard = document.getElementById("win");
 
 const gameTween = gsap.to("#game", { x: -2168, duration: 50, ease: "none", paused: true });
 
@@ -80,7 +81,7 @@ function loop() {
   speed = speed + gravity;
   y = y + speed;
   if (hitboxBottom + y > bottomLine || hitboxTop + y < topLine) {
-    endGame();
+    endGame(false);
     return;
   }
 
@@ -91,7 +92,12 @@ function loop() {
   obstacles.forEach(function (o) {
     o.img.style.transform = `translate(${o.x - scroll}px, ${o.y}px)`;
   });
-
+  //   console.log(obstacles[-1]);
+  const lastO = obstacles[obstacles.length - 1];
+  if (lastO.x - scroll + lastO.w < 0) {
+    endGame(true);
+    return;
+  }
   requestAnimationFrame(loop);
 }
 
@@ -107,11 +113,15 @@ document.addEventListener("pointerdown", function () {
   }
 });
 
-function endGame() {
+function endGame(win) {
   over = true;
   gameTween.pause();
   showGame(false);
-  failEndcard.style.visibility = "visible";
+  if (win) {
+    winEndcard.style.visibility = "visible";
+  } else {
+    failEndcard.style.visibility = "visible";
+  }
 }
 
 function restartGame() {
@@ -132,6 +142,8 @@ function restartGame() {
   });
 
   showGame(true);
+  winEndcard.style.visibility = "hidden";
+
   failEndcard.style.visibility = "hidden";
 }
 
