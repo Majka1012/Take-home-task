@@ -1,0 +1,81 @@
+html,
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+#ad {
+  position: absolute;
+
+  width: 360px;
+  height: 640px;
+  overflow: hidden;
+  cursor: pointer;
+  visibility: hidden;
+}
+#ad img {
+  position: absolute;
+}
+:where(#ad img) {
+  left: 0;
+  top: 0;
+}
+
+#gesture {
+  /* width: 86.5px; */
+  left: 146px;
+  top: 452px;
+}
+#game {
+  /* After adding design on top it didn't align to layout thats why I left: -2px */
+  left: -2px;
+  clip-path: inset(175px 0 0 0);
+}
+#bg_texture {
+  /* height: 640px; */
+  left: 10.5px;
+  top: 78.5px;
+}
+#player {
+  left: 55px;
+  top: 258px;
+}
+#bac2 {
+  left: 275px;
+  top: 328px;
+  rotate: 6deg;
+  scale: 95%;
+}
+#bac6 {
+  left: 85px;
+  top: 322px;
+  scale: 70%;
+}
+#txt1 {
+  left: 100px;
+  top: 370px;
+  scale: 95%;
+}
+#txt2 {
+  left: 301px;
+  top: 388px;
+  scale: 95%;
+}
+#gesture:hover {
+  transform: scale(110%);
+}
+
+.wall-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: red;
+  z-index: 50;
+}
+#topLine {
+  top: 200px;
+}
+#bottomLine {
+  top: 600px;
+}
