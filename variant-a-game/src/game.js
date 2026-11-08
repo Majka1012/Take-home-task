@@ -1,5 +1,5 @@
 window.addEventListener("load", function () {
-  document.querySelectorAll("#ad img").forEach(function (img) {
+  document.querySelectorAll("img").forEach(function (img) {
     img.style.width = img.naturalWidth / 2 + "px";
   });
   ad.style.visibility = "visible";
@@ -8,7 +8,16 @@ window.addEventListener("load", function () {
 const player = document.getElementById("player");
 const ad = document.getElementById("ad");
 
+const bg = document.getElementById("bg");
+const replay = document.getElementById("replay");
+
+const failEndcard = document.getElementById("fail");
+
+const gameTween = gsap.to("#game", { x: -2168, duration: 50, ease: "none", paused: true });
+
 let started = false;
+let over = false;
+
 let y = 0; // distance from the start position (positive = down)
 let speed = 0; // current vertical speed (positive = down, negative = up)
 
@@ -43,6 +52,7 @@ const names = [
   "txt9",
 ];
 names.sort(() => Math.random() - 0.5);
+
 const obstacles = [];
 let scroll = 0;
 
@@ -53,6 +63,10 @@ names.forEach(function (name, i) {
 
   const o = { img: img, x: startObstacles + i * distanceBetween, y: 300, w: 0, h: 0 };
   img.onload = function () {
+    o.w = img.naturalWidth / 2;
+    o.h = img.naturalHeight / 2;
+    img.style.width = o.w + "px";
+
     const middle = (topLine + bottomLine) / 2;
     const centre = middle + (Math.random() * 2 - 1) * 130;
     o.y = centre - o.h / 2;
@@ -66,6 +80,7 @@ function loop() {
   speed = speed + gravity;
   y = y + speed;
   if (hitboxBottom + y > bottomLine || hitboxTop + y < topLine) {
+    endGame();
     return;
   }
 
@@ -81,12 +96,53 @@ function loop() {
 }
 
 document.addEventListener("pointerdown", function () {
+  if (over) return;
   if (!started) {
     started = true;
-    gsap.to(".intro", { autoAlpha: 0, duration: 0.4, ease: "power1.out" });
-    gsap.to("#game", { x: -2168, duration: 50, ease: "none" });
+    gsap.to(".intro", { autoAlpha: 0, duration: 0.4 });
+    gameTween.play();
     loop();
   } else {
     speed = -4;
   }
 });
+
+function endGame() {
+  over = true;
+  gameTween.pause();
+  showGame(false);
+  failEndcard.style.visibility = "visible";
+}
+
+function restartGame() {
+  gameTween.pause(0);
+  y = 0;
+  speed = 0;
+  scroll = 0;
+  started = false;
+  over = false;
+  gsap.set(player, { y: 0, rotation: 0 }); //reset player
+  gsap.set(".intro", { autoAlpha: 1 });
+
+  obstacles.sort(() => Math.random() - 0.5);
+  obstacles.forEach(function (o, i) {
+    o.x = startObstacles + i * distanceBetween;
+    o.y = (topLine + bottomLine) / 2 + (Math.random() * 2 - 1) * 130 - o.h / 2;
+    o.img.style.transform = `translate(${o.x}px, ${o.y}px)`;
+  });
+
+  showGame(true);
+  failEndcard.style.visibility = "hidden";
+}
+
+replay.addEventListener("click", restartGame);
+
+function showGame(show) {
+  const v = show ? "visible" : "hidden";
+  ["game", "border", "bg_texture", "player", "tut"].forEach(function (id) {
+    document.getElementById(id).style.visibility = v;
+  });
+  obstacles.forEach(function (o) {
+    o.img.style.visibility = v;
+  });
+}

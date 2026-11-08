@@ -79,3 +79,35 @@ body {
 #bottomLine {
   top: 600px;
 }
+
+.endcard {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 360px;
+  height: 640px;
+  visibility: hidden;
+  z-index: 20;
+}
+.endcard img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#failCta {
+  left: 37px;
+  top: 483px;
+  cursor: pointer;
+}
+#replay {
+  left: 38px;
+  top: 539px;
+  cursor: pointer;
+}
+
+#endText {
+  scale: 0.969 1;
+  transform-origin: 180px 330px;
+  left: -5px;
+}
