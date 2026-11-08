@@ -9,10 +9,18 @@ const player = document.getElementById("player");
 const ad = document.getElementById("ad");
 
 const bg = document.getElementById("bg");
+
 const replay = document.getElementById("replay");
+const winInfo = document.getElementById("winCta");
+const failInfo = document.getElementById("failCta");
 
 const failEndcard = document.getElementById("fail");
 const winEndcard = document.getElementById("win");
+
+const clickTag = window.clickTag || "https://example.com/landing";
+function openLanding() {
+  window.open(clickTag, "_blank");
+}
 
 const gameTween = gsap.to("#game", { x: -2168, duration: 50, ease: "none", paused: true });
 
@@ -32,8 +40,8 @@ const topLine = 200;
 
 const gravity = 0.07;
 
-const startObstacles = 700;
-const distanceBetween = 300;
+const startObstacles = 70;
+const distanceBetween = 30;
 
 const names = [
   "bac1",
@@ -119,8 +127,11 @@ function endGame(win) {
   showGame(false);
   if (win) {
     winEndcard.style.visibility = "visible";
+    winInfo.addEventListener("click", openLanding);
   } else {
     failEndcard.style.visibility = "visible";
+    replay.addEventListener("click", restartGame);
+    failInfo.addEventListener("click", openLanding);
   }
 }
 
@@ -146,8 +157,6 @@ function restartGame() {
 
   failEndcard.style.visibility = "hidden";
 }
-
-replay.addEventListener("click", restartGame);
 
 function showGame(show) {
   const v = show ? "visible" : "hidden";

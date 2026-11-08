@@ -106,8 +106,20 @@ body {
   cursor: pointer;
 }
 
-#endText {
+#failText {
   scale: 0.969 1;
   transform-origin: 180px 330px;
   left: -5px;
+}
+
+#winText {
+  scale: 0.97 1;
+  left: -4.5px;
+}
+#winCta {
+  scale: 0.98 1;
+
+  left: 26px;
+  top: 560px;
+  cursor: pointer;
 }
