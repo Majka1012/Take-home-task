@@ -109,15 +109,15 @@
 
       <!-- Player and obstacles -->
       <img id="player" src="../assets/01_game/player.png" />
-      <img id="bac1" class="obstacle" src="../assets/01_game/bac1.png" />
-      <img id="bac2" class="intro obstacle" src="../assets/01_game/bac2.png" />
-      <img id="bac3" class="obstacle" src="../assets/01_game/bac3.png" />
+      <!-- <img id="bac1" class="obstacle" src="../assets/01_game/bac1.png" /> -->
+      <img id="bac2" class="intro" src="../assets/01_game/bac2.png" />
+      <!-- <img id="bac3" class="obstacle" src="../assets/01_game/bac3.png" />
       <img id="bac4" class="obstacle" src="../assets/01_game/bac4.png" />
-      <img id="bac5" class="obstacle" src="../assets/01_game/bac5.png" />
-      <img id="bac6" class="intro obstacle" src="../assets/01_game/bac6.png" />
-      <img id="bac6" class="intro obstacle" src="../assets/01_game/bac6.png" />
-      <img id="txt1" class="intro obstacle" src="../assets/01_game/txt1.png" />
-      <img id="txt2" class="intro obstacle" src="../assets/01_game/txt2.png" />
+      <img id="bac5" class="obstacle" src="../assets/01_game/bac5.png" /> -->
+      <img id="bac6" class="intro" src="../assets/01_game/bac6.png" />
+      <img id="bac6" class="intro" src="../assets/01_game/bac6.png" />
+      <img id="txt1" class="intro" src="../assets/01_game/txt1.png" />
+      <img id="txt2" class="intro" src="../assets/01_game/txt2.png" />
 
       <div id="bottomLine" class="wall-line"></div>
       <div id="topLine" class="wall-line"></div>
@@ -181,6 +181,7 @@
           const middle = (topLine + bottomLine) / 2;
           const centre = middle + (Math.random() * 2 - 1) * 130;
           o.y = centre - o.h / 2;
+          img.style.transform = `translate(${o.x}px, ${o.y}px)`;
         };
         obstacles.push(o);
       });
