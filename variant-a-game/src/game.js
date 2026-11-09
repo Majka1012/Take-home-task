@@ -5,6 +5,8 @@ window.addEventListener("load", function () {
   ad.style.visibility = "visible";
 });
 
+const audio = gameAudio;
+
 const player = document.getElementById("player");
 const ad = document.getElementById("ad");
 
@@ -27,20 +29,22 @@ replay.addEventListener("click", restartGame);
 failInfo.addEventListener("click", openLanding);
 winInfo.addEventListener("click", openLanding);
 
-const gameTween = gsap.to("#game", { x: -2168, duration: 50, ease: "none", paused: true });
+// Moving background
+const gameTween = gsap.to("#game", { x: -2168, duration: 30, ease: "none", paused: true });
 
 let started = false;
 let over = false;
+let paused = false;
+let animationFrame = null;
 
 let y = 0; // distance from the start position (positive = down)
 let speed = 0; // current vertical speed (positive = down, negative = up)
 
-// Player is 42x41. These two are used only for the top and bottom wall check.
 const hitboxTop = 258 + 10;
 const hitboxBottom = 299;
 
 const bottomLine = 600;
-const topLine = 200;
+const topLine = 190;
 
 const gravity = 0.07;
 
@@ -49,6 +53,8 @@ const startObstacles = 700;
 const distanceBetween = 300;
 
 const cut = { bac: 0.25, txt: 0.08 }; // fraction removed from each side of the obstacle hitbox
+
+const playerJump = -3.5;
 
 const names = [
   "bac1",
@@ -82,7 +88,7 @@ names.forEach(function (name, i) {
     y: 300,
     w: 0,
     h: 0,
-    cut: name.startsWith("bac") ? cut.bac : cut.txt, // <-- saved on the obstacle, touches() uses it
+    cut: name.startsWith("bac") ? cut.bac : cut.txt,
   };
 
   if (debug) {
@@ -106,6 +112,8 @@ names.forEach(function (name, i) {
 });
 
 function loop() {
+  if (paused || over || !started) return;
+
   speed = speed + gravity;
   y = y + speed;
   if (hitboxBottom + y > bottomLine || hitboxTop + y < topLine) {
@@ -141,39 +149,74 @@ function loop() {
     return;
   }
 
-  requestAnimationFrame(loop);
+  animationFrame = requestAnimationFrame(loop);
 }
 
 document.addEventListener("pointerdown", function () {
-  if (over) return;
+  if (over || paused) return;
   if (!started) {
     started = true;
+    audio.startBackground();
     gsap.to(".intro", { autoAlpha: 0, duration: 0.4 });
     gameTween.play();
     loop();
   } else {
-    speed = -4;
+    speed = playerJump;
+  }
+});
+
+// Pause and resume when the tab becomes hidden or visible
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) {
+    if (started && !over) {
+      paused = true;
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+      gameTween.pause();
+      audio.pauseBackground();
+    }
+  } else {
+    if (paused && started && !over) {
+      paused = false;
+      gameTween.play();
+      audio.startBackground();
+      loop();
+    }
   }
 });
 
 function endGame(win) {
   over = true;
+  cancelAnimationFrame(animationFrame);
+  animationFrame = null;
+
   gameTween.pause();
+  audio.stopBackground();
+
   showGame(false);
+
   if (win) {
+    audio.playWin();
     winEndcard.style.visibility = "visible";
   } else {
+    audio.playCrash();
+    audio.playFail();
     failEndcard.style.visibility = "visible";
   }
 }
-
 function restartGame() {
+  audio.stopAll();
+  cancelAnimationFrame(animationFrame);
+  animationFrame = null;
+
   gameTween.pause(0);
   y = 0;
   speed = 0;
   scroll = 0;
   started = false;
   over = false;
+  paused = false;
+
   gsap.set(player, { y: 0, rotation: 0 }); // reset player
   gsap.set(".intro", { autoAlpha: 1 });
 
@@ -200,7 +243,7 @@ function showGame(show) {
   });
 }
 
-// Rectangle overlap test: poo (a bit smaller than its image) against the obstacle (shrunk by o.cut on each side)
+// Rectangle overlap test: player (a bit smaller than its image) against the obstacle (shrunk by o.cut on each side)
 function touches(o) {
   const ox = o.x - scroll + o.w * o.cut;
   const oy = o.y + o.h * o.cut;
