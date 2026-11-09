@@ -62,7 +62,7 @@ body {
   scale: 95%;
 }
 #gesture:hover {
-  transform: scale(110%);
+  transform: scale(120%);
 }
 
 .wall-line {
@@ -72,12 +72,6 @@ body {
   height: 2px;
   background: red;
   z-index: 50;
-}
-#topLine {
-  top: 200px;
-}
-#bottomLine {
-  top: 600px;
 }
 
 .endcard {
@@ -123,3 +117,10 @@ body {
   top: 560px;
   cursor: pointer;
 }
+
+/* #topLine {
+  top: 190px;
+}
+#bottomLine {
+  top: 610px;
+} */
