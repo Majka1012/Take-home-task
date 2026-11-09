@@ -29,11 +29,20 @@
         top: 0;
         width: 1032px;
       }
+      #glow {
+        position: absolute;
+        left: 167px;
+        top: -5px;
+        width: 700px;
+        height: 260px;
+        background: radial-gradient(ellipse at center, rgba(231, 241, 234, 0.6), rgba(78, 227, 113, 0) 70%);
+      }
     </style>
   </head>
   <body>
     <div id="ad">
-      <img id="bg" src="../assets/bg-big.jpg" />
+      <img id="bg" src="../assets/bg-big.webp" />
+      <div id="glow"></div>
       <img id="hl" src="../assets/top/hl.png" />
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -41,8 +50,22 @@
       const clickTag = window.clickTag || "https://example.com/landing";
       document.getElementById("ad").onclick = () => window.open(clickTag, "_blank");
       gsap.from("#bg", { scale: 1.1, duration: 4, ease: "slow.out" });
-
       gsap.from("#hl", { opacity: 0, y: 20, duration: 1, ease: "power2.out", delay: 1 });
+      gsap.fromTo(
+        "#glow",
+        { opacity: 0, scale: 0.8 },
+        { opacity: 0.8, scale: 1, duration: 2, delay: 1.5, ease: "power2.out" },
+      );
+
+      gsap.to("#glow", {
+        opacity: 1,
+        scale: 1.05,
+        duration: 2,
+        yoyo: true,
+        repeat: 11,
+        delay: 3,
+        ease: "sine.inOut",
+      });
     </script>
   </body>
 </html>

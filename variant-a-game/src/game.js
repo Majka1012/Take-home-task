@@ -139,7 +139,7 @@ names.forEach(function (name, i) {
     img.style.transform = `translate(${o.x}px, ${o.y}px)`;
   };
 
-  img.src = `../assets/01_game/${name}.png`;
+  img.src = `../assets/01_game/${name}.webp`;
   obstacles.push(o);
 });
 

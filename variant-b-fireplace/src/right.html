@@ -48,11 +48,11 @@
   </head>
   <body>
     <div id="ad">
-      <img id="bg" src="../assets/bg-big.jpg" />
+      <img id="bg" src="../assets/bg-big.webp" />
       <img id="logo" src="../assets/right/logo.png" />
       <img id="hl" src="../assets/right/hl.png" />
-      <img id="box" src="../assets/box.png" />
-      <img id="cta" src="../assets/cta.png" />
+      <img id="box" src="../assets/box.webp" />
+      <img id="cta" src="../assets/cta.webp" />
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
@@ -67,7 +67,7 @@
         .from("#box", { opacity: 0, y: 30, duration: 0.8, ease: "power2.out" }, 2)
         .from("#cta", { opacity: 0, scale: 0.7, duration: 0.8, ease: "back.out(1.7)" }, 3.5);
 
-      gsap.to("#cta", { scale: 1.05, duration: 0.9, yoyo: true, repeat: 27, ease: "sine.inOut", delay: 5 }); //0.9*(1+27)+5=30.2sek
+      gsap.to("#cta", { scale: 1.05, duration: 0.9, yoyo: true, repeat: 32, ease: "sine.inOut", delay: 5 }); //0.9*(1+32)=29.7sec
     </script>
   </body>
 </html>
